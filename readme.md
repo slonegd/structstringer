@@ -1,0 +1,1 @@
+structstringer - generator of stringer interface fo structs
