@@ -7,7 +7,7 @@ import "strconv"
 
 func (t A) String() string {
 	var builder strings.Builder
-	// TODO use Grow
+	builder.Grow(80) // TODO count
 	builder.WriteString("\nA{")
 	builder.WriteString("\n\ti    int  ")
 	builder.WriteString(strconv.Itoa(t.i))

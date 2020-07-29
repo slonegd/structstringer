@@ -1,6 +1,8 @@
 package simple_struct
 
 import (
+	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,5 +24,33 @@ A{
 	}
 	for _, tt := range tests {
 		assert.Equal(t, tt.want, tt.a.String())
+	}
+}
+
+func Benchmark_A_String(b *testing.B) {
+
+	b.ResetTimer()
+	for i := 0; i < 10000; i++ {
+		a := randomA()
+		b.StartTimer()
+		a.String()
+		b.StopTimer()
+	}
+}
+
+func Benchmark_A_fmt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < 10000; i++ {
+		a := randomA()
+		b.StartTimer()
+		fmt.Sprintf("%+v", a)
+		b.StopTimer()
+	}
+}
+
+func randomA() A {
+	return A{
+		i:    rand.Int(),
+		flag: rand.Int()%2 == 0,
 	}
 }

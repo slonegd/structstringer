@@ -192,7 +192,7 @@ import "strconv"
 
 func (t $(type)) String() string {
 	var builder strings.Builder
-	// TODO use Grow
+	builder.Grow(80) // TODO count
 	builder.WriteString("\n$(type){")
 $(fields)
 	builder.WriteString("\n}")
