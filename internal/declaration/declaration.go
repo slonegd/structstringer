@@ -1,7 +1,6 @@
 package declaration
 
 import (
-	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -15,7 +14,7 @@ func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 	for _, fileName := range files {
 		file, err := parser.ParseFile(fileset, fileName, nil, 0)
 		if err != nil {
-			return nil, fmt.Errorf("pars file %q: %w", fileName, err)
+			return nil, fmt.Errorf("parse file: %w", err)
 		}
 		for _, decl := range file.Decls {
 			if genDecl, ok := decl.(*ast.GenDecl); ok && genDecl.Tok == token.TYPE {
@@ -32,7 +31,7 @@ func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 func ExtractFields(typeSpec *ast.TypeSpec) (field.Fields, error) {
 	structType, ok := typeSpec.Type.(*ast.StructType)
 	if !ok {
-		return nil, errors.New("type not a struct")
+		return nil, fmt.Errorf("type %q not a struct", typeSpec.Name.Name)
 	}
 	list := structType.Fields.List
 	pfields := make([]*ast.Field, 0, len(list))
