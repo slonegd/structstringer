@@ -13,7 +13,6 @@ func (t A) String() string {
 	builder.WriteString(strconv.Itoa(t.i))
 	builder.WriteString("\n\tflag bool ")
 	builder.WriteString(strconv.FormatBool(t.flag))
-
 	builder.WriteString("\n}")
 	return builder.String()
 }
