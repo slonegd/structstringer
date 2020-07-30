@@ -4,6 +4,7 @@ import "strings"
 
 func String(packageName, typeName, fields string) string {
 	result := strings.ReplaceAll(template, "$(package)", packageName)
+	result = strings.ReplaceAll(result, "$(fullType)", packageName+"."+typeName)
 	result = strings.ReplaceAll(result, "$(type)", typeName)
 	result = strings.ReplaceAll(result, "$(fields)", fields)
 	return result
@@ -19,7 +20,7 @@ import "strconv"
 func (t $(type)) String() string {
 	var builder strings.Builder
 	builder.Grow(80) // TODO count
-	builder.WriteString("\n$(type){")$(fields)
+	builder.WriteString("\n$(fullType){")$(fields)
 	builder.WriteString("\n}")
 	return builder.String()
 }

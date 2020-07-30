@@ -8,7 +8,7 @@ import "strconv"
 func (t A) String() string {
 	var builder strings.Builder
 	builder.Grow(80) // TODO count
-	builder.WriteString("\nA{")
+	builder.WriteString("\nsimple_struct.A{")
 	builder.WriteString("\n\ti    int  ")
 	builder.WriteString(strconv.Itoa(t.i))
 	builder.WriteString("\n\tflag bool ")

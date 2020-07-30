@@ -17,7 +17,7 @@ func TestA_String(t *testing.T) {
 		{
 			a: A{i: 42, flag: true},
 			want: `
-A{
+simple_struct.A{
 	i    int  42
 	flag bool true
 }`,
