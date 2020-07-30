@@ -36,4 +36,4 @@ jobs:
       run: go test ./... -timeout 30s -coverprofile=cover.out
 
     - name: lint
-      uses: matoous/golangci-lint-action@v1.1.0
+      uses: docker://matoous/golangci-lint-action:v1.1.0
