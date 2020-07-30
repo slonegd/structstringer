@@ -1,6 +1,7 @@
 package declaration
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -28,8 +29,12 @@ func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 	return nil, fmt.Errorf("cant find type %q", typeName)
 }
 
-func ExtractFields(typeSpec *ast.TypeSpec) field.Fields {
-	list := typeSpec.Type.(*ast.StructType).Fields.List
+func ExtractFields(typeSpec *ast.TypeSpec) (field.Fields, error) {
+	structType, ok := typeSpec.Type.(*ast.StructType)
+	if !ok {
+		return nil, errors.New("type not a struct")
+	}
+	list := structType.Fields.List
 	pfields := make([]*ast.Field, 0, len(list))
 	for _, f := range list {
 		pfields = append(pfields, f)
@@ -43,5 +48,5 @@ func ExtractFields(typeSpec *ast.TypeSpec) field.Fields {
 		})
 	}
 
-	return fields
+	return fields, nil
 }

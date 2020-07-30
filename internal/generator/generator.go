@@ -16,7 +16,8 @@ func Generate(typeName string) {
 	typeSpec, err := declaration.Find(pkg.GoFiles, typeName)
 	catchError(err)
 
-	fields := declaration.ExtractFields(typeSpec)
+	fields, err := declaration.ExtractFields(typeSpec)
+	catchError(err)
 
 	data := printer.String(pkg.Name, typeName, fields.String())
 
