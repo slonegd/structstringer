@@ -1,7 +1,6 @@
 package declaration
 
 import (
-	"go/ast"
 	"testing"
 
 	"github.com/slonegd/structstringer/internal/field"
@@ -46,9 +45,6 @@ func TestFind(t *testing.T) {
 }
 
 func TestExtractFields(t *testing.T) {
-	type args struct {
-		typeSpec *ast.TypeSpec
-	}
 	tests := []struct {
 		name     string
 		files    []string

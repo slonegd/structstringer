@@ -1,3 +1,4 @@
+//nolint
 package declaration_test
 
 type B struct {

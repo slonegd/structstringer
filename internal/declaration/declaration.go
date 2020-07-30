@@ -34,13 +34,9 @@ func ExtractFields(typeSpec *ast.TypeSpec) (field.Fields, error) {
 		return nil, fmt.Errorf("type %q not a struct", typeSpec.Name.Name)
 	}
 	list := structType.Fields.List
-	pfields := make([]*ast.Field, 0, len(list))
-	for _, f := range list {
-		pfields = append(pfields, f)
-	}
 
-	fields := make(field.Fields, 0, len(pfields))
-	for _, pfield := range pfields {
+	fields := make(field.Fields, 0, len(list))
+	for _, pfield := range list {
 		fields = append(fields, field.Field{
 			Name: pfield.Names[0].Name,
 			Type: pfield.Type.(*ast.Ident).Name,
