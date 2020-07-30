@@ -2,11 +2,11 @@ package field
 
 import (
 	"fmt"
-	"go/ast"
 )
 
 type Field struct {
-	Name, Type, allignedType string
+	Name, Type                 string
+	allignedName, allignedType string
 }
 
 func (field Field) String() string {
@@ -17,24 +17,6 @@ func (field Field) String() string {
 
 type Fields []Field
 
-func Extract(typeSpec *ast.TypeSpec) Fields {
-	list := typeSpec.Type.(*ast.StructType).Fields.List
-	pfields := make([]*ast.Field, 0, len(list))
-	for _, f := range list {
-		pfields = append(pfields, f)
-	}
-
-	fields := make(Fields, 0, len(pfields))
-	for _, field := range pfields {
-		fields = append(fields, Field{
-			Name: field.Names[0].Name,
-			Type: field.Type.(*ast.Ident).Name,
-		})
-	}
-
-	return fields
-}
-
 func (fields Fields) String() string {
 	result := ""
 	for _, field := range alignWight(fields) {
@@ -44,7 +26,7 @@ func (fields Fields) String() string {
 }
 
 func (field Field) generateDescription() string {
-	return fmt.Sprintf(`"\n\t%s %s "`, field.Name, field.allignedType)
+	return fmt.Sprintf(`"\n\t%s %s "`, field.allignedName, field.allignedType)
 }
 
 func (field Field) generateStringer() string {
@@ -54,7 +36,7 @@ func (field Field) generateStringer() string {
 	case "bool":
 		return fmt.Sprintf("strconv.FormatBool(t.%s)", field.Name)
 	default:
-		return "not_implemented"
+		return `"not_implemented"`
 	}
 }
 
@@ -70,7 +52,7 @@ func alignWight(fields Fields) Fields {
 		}
 	}
 	for i, field := range fields {
-		fields[i].Name = growWight(field.Name, nameWight)
+		fields[i].allignedName = growWight(field.Name, nameWight)
 		fields[i].allignedType = growWight(field.Type, typeWight)
 	}
 	return fields

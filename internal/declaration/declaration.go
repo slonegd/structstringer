@@ -5,6 +5,8 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+
+	"github.com/slonegd/structstringer/internal/field"
 )
 
 func Find(files []string, typeName string) (*ast.TypeSpec, error) {
@@ -24,4 +26,22 @@ func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 		}
 	}
 	return nil, fmt.Errorf("cant find type %q", typeName)
+}
+
+func ExtractFields(typeSpec *ast.TypeSpec) field.Fields {
+	list := typeSpec.Type.(*ast.StructType).Fields.List
+	pfields := make([]*ast.Field, 0, len(list))
+	for _, f := range list {
+		pfields = append(pfields, f)
+	}
+
+	fields := make(field.Fields, 0, len(pfields))
+	for _, pfield := range pfields {
+		fields = append(fields, field.Field{
+			Name: pfield.Names[0].Name,
+			Type: pfield.Type.(*ast.Ident).Name,
+		})
+	}
+
+	return fields
 }
