@@ -2,17 +2,54 @@
 // DO NOT EDIT!
 package simple_struct
 
-import "strings"
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 func (t A) String() string {
 	var builder strings.Builder
-	builder.Grow(80) // TODO count
+	builder.Grow(1024) // TODO count
 	builder.WriteString("\nsimple_struct.A{")
-	builder.WriteString("\n\ti    int  ")
-	builder.WriteString(strconv.Itoa(t.i))
-	builder.WriteString("\n\tflag bool ")
+	builder.WriteString("\n\tflag bool       ")
 	builder.WriteString(strconv.FormatBool(t.flag))
+	builder.WriteString("\n\tstr  string     ")
+	builder.WriteString(t.str)
+	builder.WriteString("\n\ti    int        ")
+	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString("\n\ti8   int8       ")
+	builder.WriteString(strconv.Itoa(int(t.i8)))
+	builder.WriteString("\n\ti16  int16      ")
+	builder.WriteString(strconv.Itoa(int(t.i16)))
+	builder.WriteString("\n\ti32  int32      ")
+	builder.WriteString(strconv.Itoa(int(t.i32)))
+	builder.WriteString("\n\ti64  int64      ")
+	builder.WriteString(strconv.Itoa(int(t.i64)))
+	builder.WriteString("\n\tui   uint       ")
+	builder.WriteString(strconv.Itoa(int(t.ui)))
+	builder.WriteString("\n\tui8  uint8      ")
+	builder.WriteString(strconv.Itoa(int(t.ui8)))
+	builder.WriteString("\n\tui16 uint16     ")
+	builder.WriteString(strconv.Itoa(int(t.ui16)))
+	builder.WriteString("\n\tui64 uint64     ")
+	builder.WriteString(strconv.FormatUint(t.ui64, 10))
+	builder.WriteString("\n\tb    byte       ")
+	builder.WriteString("0x")
+	builder.WriteString(strconv.FormatUint(uint64(t.b), 16))
+	builder.WriteString("\n\tp    uintptr    ")
+	builder.WriteString("0x")
+	builder.WriteString(strconv.FormatUint(uint64(t.p), 16))
+	builder.WriteString("\n\tr    rune       ")
+	builder.WriteString(string(t.r))
+	builder.WriteString("\n\tf64  float64    ")
+	builder.WriteString(strconv.FormatFloat(t.f64, 'e', -1, 64))
+	builder.WriteString("\n\tf32  float32    ")
+	builder.WriteString(strconv.FormatFloat(float64(t.f32), 'e', -1, 32))
+	builder.WriteString("\n\tc64  complex64  ")
+	builder.WriteString(fmt.Sprintf("%g", t.c64))
+	builder.WriteString("\n\tc128 complex128 ")
+	builder.WriteString(fmt.Sprintf("%g", t.c128))
 	builder.WriteString("\n}")
 	return builder.String()
 }

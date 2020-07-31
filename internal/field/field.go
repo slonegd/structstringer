@@ -11,8 +11,8 @@ type Field struct {
 
 func (field Field) String() string {
 	return fmt.Sprintf(`
-	builder.WriteString(%s)
-	builder.WriteString(%s)`, field.generateDescription(), field.generateStringer())
+	%s
+	%s`, field.generateDescription(), field.generateStringer())
 }
 
 type Fields []Field
@@ -26,17 +26,37 @@ func (fields Fields) String() string {
 }
 
 func (field Field) generateDescription() string {
-	return fmt.Sprintf(`"\n\t%s %s "`, field.allignedName, field.allignedType)
+	return fmt.Sprintf(`builder.WriteString("\n\t%s %s ")`, field.allignedName, field.allignedType)
 }
 
 func (field Field) generateStringer() string {
 	switch field.Type {
-	case "int":
-		return fmt.Sprintf("strconv.Itoa(t.%s)", field.Name)
 	case "bool":
-		return fmt.Sprintf("strconv.FormatBool(t.%s)", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatBool(t.%s))", field.Name)
+	case "string":
+		return fmt.Sprintf("builder.WriteString(t.%s)", field.Name)
+	case "int":
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.Name)
+	case "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32":
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.Name)
+	case "byte":
+		return fmt.Sprintf(`builder.WriteString("0x")
+		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
+	case "uint64":
+		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.Name)
+	case "uintptr":
+		return fmt.Sprintf(`builder.WriteString("0x")
+		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
+	case "rune":
+		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.Name)
+	case "float64":
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(t.%s, 'e', -1, 64))", field.Name)
+	case "float32":
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(float64(t.%s), 'e', -1, 32))", field.Name)
+	case "complex64", "complex128":
+		return fmt.Sprintf(`builder.WriteString(fmt.Sprintf("%%g", t.%s))`, field.Name)
 	default:
-		return `"not_implemented"`
+		return `builder.WriteString("not_implemented")`
 	}
 }
 

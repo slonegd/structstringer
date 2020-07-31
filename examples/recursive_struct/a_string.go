@@ -2,12 +2,14 @@
 // DO NOT EDIT!
 package recursive_struct
 
-import "strings"
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 func (t A) String() string {
 	var builder strings.Builder
-	builder.Grow(80) // TODO count
+	builder.Grow(1024) // TODO count
 	builder.WriteString("\nrecursive_struct.A{")
 	builder.WriteString("\n\ti    int  ")
 	builder.WriteString(strconv.Itoa(t.i))
