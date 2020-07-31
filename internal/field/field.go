@@ -38,6 +38,7 @@ func (field Field) generateStringer() string {
 	default:
 		return `"not_implemented"`
 	}
+	return `"not_implemented"`
 }
 
 func alignWight(fields Fields) Fields {
