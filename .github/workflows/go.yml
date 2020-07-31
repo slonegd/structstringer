@@ -29,11 +29,11 @@ jobs:
     - name: build
       run: go build -v .
 
-    - name: Generate
+    - name: generate
       run: go generate ./...
 
     - name: test
       run: go test ./... -timeout 30s -coverprofile=cover.out
 
     - name: lint
-      uses: actions-contrib/golangci-lint@v1
+      uses: golangci/golangci-lint-action@v1
