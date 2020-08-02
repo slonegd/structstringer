@@ -66,7 +66,7 @@ simple.A{
 	}
 }
 
-func Benchmark_A_String(b *testing.B) {
+func BenchmarkAString(b *testing.B) {
 	b.ResetTimer()
 	a := randomA()
 	b.StartTimer()
@@ -75,7 +75,7 @@ func Benchmark_A_String(b *testing.B) {
 
 }
 
-func Benchmark_A_fmt(b *testing.B) {
+func BenchmarkAfmt(b *testing.B) {
 	b.ResetTimer()
 	a := randomA()
 	b.StartTimer()

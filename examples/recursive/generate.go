@@ -13,4 +13,11 @@ type A struct {
 type B struct {
 	i    int
 	flag bool
+	c    C
+}
+
+// C - test struct
+type C struct {
+	i    int
+	flag bool
 }
