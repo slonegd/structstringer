@@ -15,11 +15,15 @@ func TestA_String(t *testing.T) {
 	}{
 		{
 			a: A{i: 42, flag: true, b: B{i: 43}},
+			// TODO recursive.B - package name
 			want: `
 recursive.A{
 	i    int  42
 	flag bool true
-	b    B    not_implemented
+	b    B    {
+		i    int  42
+		flag bool true
+	}
 }`,
 			fmtWant: "recursive.A{i:42, flag:true, b:recursive.B{i:43, flag:false}}",
 		},

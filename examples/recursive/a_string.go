@@ -16,7 +16,12 @@ func (t A) String() string {
 	builder.WriteString("\n\tflag bool ")
 	builder.WriteString(strconv.FormatBool(t.flag))
 	builder.WriteString("\n\tb    B    ")
-	builder.WriteString("not_implemented")
+	builder.WriteRune('{')
+	builder.WriteString("\n\t\ti    int  ")
+	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString("\n\t\tflag bool ")
+	builder.WriteString(strconv.FormatBool(t.flag))
+	builder.WriteString("\n\t}")
 	builder.WriteString("\n}")
 	return builder.String()
 }
