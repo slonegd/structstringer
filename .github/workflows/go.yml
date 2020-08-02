@@ -35,6 +35,9 @@ jobs:
     - name: test
       run: go test ./... -timeout 30s -coverprofile=cover.out
 
+    - name: coverage
+      run: bash <(curl -s https://codecov.io/bash)
+
     - name: lint
       uses: golangci/golangci-lint-action@v1
       with:
