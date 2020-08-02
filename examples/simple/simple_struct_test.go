@@ -1,4 +1,4 @@
-package simple_struct
+package simple
 
 import (
 	"fmt"
@@ -37,7 +37,7 @@ func TestA_String(t *testing.T) {
 				c128: complex(12, -5),
 			},
 			want: `
-simple_struct.A{
+simple.A{
 	flag bool       true
 	str  string     forty two
 	i    int        42
@@ -57,7 +57,7 @@ simple_struct.A{
 	c64  complex64  (5-12i)
 	c128 complex128 (12-5i)
 }`,
-			fmtWant: `simple_struct.A{flag:true, str:"forty two", i:42, i8:-8, i16:-16, i32:-32, i64:-64, ui:0x1, ui8:0x8, ui16:0x10, ui64:0xffffffffffffffff, b:0xff, p:0x1122334455667788, r:169, f64:0.42, f32:0.84, c64:(5-12i), c128:(12-5i)}`,
+			fmtWant: `simple.A{flag:true, str:"forty two", i:42, i8:-8, i16:-16, i32:-32, i64:-64, ui:0x1, ui8:0x8, ui16:0x10, ui64:0xffffffffffffffff, b:0xff, p:0x1122334455667788, r:169, f64:0.42, f32:0.84, c64:(5-12i), c128:(12-5i)}`,
 		},
 	}
 	for _, tt := range tests {

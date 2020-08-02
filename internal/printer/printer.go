@@ -2,6 +2,7 @@ package printer
 
 import "strings"
 
+// String - convert to string
 func String(packageName, typeName, fields string) string {
 	result := strings.ReplaceAll(template, "$(package)", packageName)
 	result = strings.ReplaceAll(result, "$(fullType)", packageName+"."+typeName)

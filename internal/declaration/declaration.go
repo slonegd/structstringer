@@ -9,6 +9,7 @@ import (
 	"github.com/slonegd/structstringer/internal/field"
 )
 
+// Find - find type declaration in files
 func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 	fileset := token.NewFileSet()
 	for _, fileName := range files {
@@ -28,6 +29,7 @@ func Find(files []string, typeName string) (*ast.TypeSpec, error) {
 	return nil, fmt.Errorf("cant find type %q", typeName)
 }
 
+// ExtractFields - convert fields of the struct from ast to some simplier
 func ExtractFields(typeSpec *ast.TypeSpec) (field.Fields, error) {
 	structType, ok := typeSpec.Type.(*ast.StructType)
 	if !ok {

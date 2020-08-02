@@ -1,6 +1,8 @@
-package simple_struct
+package simple
 
 //go:generate go run ../.. -type A
+
+// A - test struct
 type A struct {
 	flag bool
 	str  string

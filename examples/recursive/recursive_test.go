@@ -1,4 +1,4 @@
-package recursive_struct
+package recursive
 
 import (
 	"fmt"
@@ -16,12 +16,12 @@ func TestA_String(t *testing.T) {
 		{
 			a: A{i: 42, flag: true, b: B{i: 43}},
 			want: `
-recursive_struct.A{
+recursive.A{
 	i    int  42
 	flag bool true
 	b    B    not_implemented
 }`,
-			fmtWant: "recursive_struct.A{i:42, flag:true, b:recursive_struct.B{i:43, flag:false}}",
+			fmtWant: "recursive.A{i:42, flag:true, b:recursive.B{i:43, flag:false}}",
 		},
 	}
 	for _, tt := range tests {

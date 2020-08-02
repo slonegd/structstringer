@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Field - simple struct represented one field of the struct
 type Field struct {
 	Name, Type                 string
 	allignedName, allignedType string
@@ -15,6 +16,7 @@ func (field Field) String() string {
 	%s`, field.generateDescription(), field.generateStringer())
 }
 
+// Fields - slice of Field
 type Fields []Field
 
 func (fields Fields) String() string {
