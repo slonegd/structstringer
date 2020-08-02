@@ -7,6 +7,7 @@ import (
 // Field - simple struct represented one field of the struct
 type Field struct {
 	Name, Type                 string
+	Fields                     Fields
 	allignedName, allignedType string
 }
 

@@ -1,5 +1,5 @@
 //nolint
-package declaration_test
+package extractor
 
 type B struct {
 	i    int
