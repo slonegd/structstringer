@@ -18,7 +18,7 @@ func Generate(typeName string) {
 	typeSpec, err := finder.Find(typeName)
 	catchError(err)
 
-	extractor := extractor.NewExtractor(finder)
+	extractor := extractor.NewExtractor(finder, pkg.Name)
 	fields, err := extractor.ExtractFields(typeSpec)
 	catchError(err)
 

@@ -45,15 +45,15 @@ func TestFields_String(t *testing.T) {
 			name: "recursive",
 			fields: Fields{
 				{Name: "i", Type: "int"},
-				{Name: "b", Type: "B", Fields: Fields{
+				{Name: "b", Type: "B", Package: "field", Fields: Fields{
 					{Name: "i", Type: "int"},
 					{Name: "flag", Type: "bool"},
 				}},
 			},
 			want: `
-	builder.WriteString("\n\ti int ")
+	builder.WriteString("\n\ti int     ")
 	builder.WriteString(strconv.Itoa(t.i))
-	builder.WriteString("\n\tb B   ")
+	builder.WriteString("\n\tb field.B ")
 	builder.WriteRune('{')
 	builder.WriteString("\n\t\ti    int  ")
 	builder.WriteString(strconv.Itoa(t.i))

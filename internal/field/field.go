@@ -6,7 +6,7 @@ import (
 
 // Field - simple struct represented one field of the struct
 type Field struct {
-	Name, Type                 string
+	Name, Type, Package        string
 	Fields                     Fields
 	allignedName, allignedType string
 	tabs                       string
@@ -84,12 +84,15 @@ func (field Field) generateStringer() string {
 func alignWight(fields Fields) Fields {
 	nameWight := 0
 	typeWight := 0
-	for _, field := range fields {
+	for i, field := range fields {
 		if len(field.Name) > nameWight {
 			nameWight = len(field.Name)
 		}
-		if len(field.Type) > typeWight {
-			typeWight = len(field.Type)
+		if field.Fields != nil {
+			fields[i].Type = field.Package + "." + field.Type
+		}
+		if len(fields[i].Type) > typeWight {
+			typeWight = len(fields[i].Type)
 		}
 	}
 	for i, field := range fields {

@@ -16,15 +16,14 @@ func TestA_String(t *testing.T) {
 	}{
 		{
 			a: A{i: 42, flag: true, b: B{i: 43}},
-			// TODO recursive.B - package name
 			want: `
 recursive.A{
-	i    int  42
-	flag bool true
-	b    B    {
-		i    int  42
-		flag bool true
-		c    C    {
+	i    int         42
+	flag bool        true
+	b    recursive.B {
+		i    int         42
+		flag bool        true
+		c    recursive.C {
 			i    int  42
 			flag bool true
 		}

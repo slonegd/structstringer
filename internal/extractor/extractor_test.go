@@ -10,36 +10,40 @@ import (
 
 func Test_extractor_ExtractFields(t *testing.T) {
 	tests := []struct {
-		name     string
-		files    []string
-		typeName string
-		want     field.Fields
-		wantErr  string
+		name        string
+		files       []string
+		typeName    string
+		packageName string
+		want        field.Fields
+		wantErr     string
 	}{
 		{
-			name:     "happy path",
-			files:    []string{"file1_test.go", "file2_test.go"},
-			typeName: "A",
+			name:        "happy path",
+			files:       []string{"file1_test.go", "file2_test.go"},
+			typeName:    "A",
+			packageName: "extractor",
 			want: field.Fields{
-				{Name: "i", Type: "int"},
-				{Name: "flag", Type: "bool"},
+				{Name: "i", Type: "int", Package: "extractor"},
+				{Name: "flag", Type: "bool", Package: "extractor"},
 			},
 		},
 		{
-			name:     "not a struct",
-			files:    []string{"file1_test.go", "file2_test.go"},
-			typeName: "C",
-			wantErr:  `type "C" not a struct`,
+			name:        "not a struct",
+			files:       []string{"file1_test.go", "file2_test.go"},
+			typeName:    "C",
+			packageName: "extractor",
+			wantErr:     `type "C" not a struct`,
 		},
 		{
-			name:     "recurcive fields",
-			files:    []string{"file1_test.go", "file2_test.go"},
-			typeName: "D",
+			name:        "recurcive fields",
+			files:       []string{"file1_test.go", "file2_test.go"},
+			typeName:    "D",
+			packageName: "extractor",
 			want: field.Fields{
-				{Name: "i", Type: "int"},
-				{Name: "b", Type: "B", Fields: field.Fields{
-					{Name: "i", Type: "int"},
-					{Name: "flag", Type: "bool"},
+				{Name: "i", Type: "int", Package: "extractor"},
+				{Name: "b", Type: "B", Package: "extractor", Fields: field.Fields{
+					{Name: "i", Type: "int", Package: "extractor"},
+					{Name: "flag", Type: "bool", Package: "extractor"},
 				}},
 			},
 		},
@@ -48,7 +52,7 @@ func Test_extractor_ExtractFields(t *testing.T) {
 		finder := declaration.NewFinder(tt.files)
 		decl, _ := finder.Find(tt.typeName)
 
-		extractor := NewExtractor(finder)
+		extractor := NewExtractor(finder, tt.packageName)
 		got, err := extractor.ExtractFields(decl)
 		if tt.wantErr != "" {
 			assert.Error(t, err)
