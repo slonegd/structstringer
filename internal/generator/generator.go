@@ -4,19 +4,22 @@ import (
 	"log"
 
 	"github.com/slonegd/structstringer/internal/declaration"
-	"github.com/slonegd/structstringer/internal/package_info"
+	"github.com/slonegd/structstringer/internal/extractor"
+	"github.com/slonegd/structstringer/internal/packinfo"
 	"github.com/slonegd/structstringer/internal/printer"
 	"github.com/slonegd/structstringer/internal/saver"
 )
 
 func Generate(typeName string) {
-	pkg, err := package_info.Get()
+	pkg, err := packinfo.Get()
 	catchError(err)
 
-	typeSpec, err := declaration.Find(pkg.GoFiles, typeName)
+	finder := declaration.NewFinder(pkg.GoFiles)
+	typeSpec, err := finder.Find(typeName)
 	catchError(err)
 
-	fields, err := declaration.ExtractFields(typeSpec)
+	extractor := extractor.NewExtractor(finder, pkg.Name)
+	fields, err := extractor.ExtractFields(typeSpec)
 	catchError(err)
 
 	data := printer.String(pkg.Name, typeName, fields.String())

@@ -14,7 +14,7 @@ func TestFields_String(t *testing.T) {
 	}{
 		{
 			name: "happy path",
-			fields: []Field{
+			fields: Fields{
 				{Name: "i", Type: "int"},
 				{Name: "flag", Type: "bool"},
 			},
@@ -31,7 +31,7 @@ func TestFields_String(t *testing.T) {
 		},
 		{
 			name: "not implemented",
-			fields: []Field{
+			fields: Fields{
 				{Name: "i", Type: "int"},
 				{Name: "flag", Type: "bools"},
 			},
@@ -40,6 +40,26 @@ func TestFields_String(t *testing.T) {
 	builder.WriteString(strconv.Itoa(t.i))
 	builder.WriteString("\n\tflag bools ")
 	builder.WriteString("not_implemented")`,
+		},
+		{
+			name: "recursive",
+			fields: Fields{
+				{Name: "i", Type: "int"},
+				{Name: "b", Type: "B", Package: "field", Fields: Fields{
+					{Name: "i", Type: "int"},
+					{Name: "flag", Type: "bool"},
+				}},
+			},
+			want: `
+	builder.WriteString("\n\ti int     ")
+	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString("\n\tb field.B ")
+	builder.WriteRune('{')
+	builder.WriteString("\n\t\ti    int  ")
+	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString("\n\t\tflag bool ")
+	builder.WriteString(strconv.FormatBool(t.flag))
+	builder.WriteString("\n\t}")`,
 		},
 	}
 	for _, tt := range tests {

@@ -14,17 +14,15 @@ var (
 	typeName = flag.String("type", "", "type name; must be set")
 )
 
-func Usage() {
-	fmt.Fprintf(os.Stderr, "Usage of structstringer:\n")
-	fmt.Fprintf(os.Stderr, "\tstructstringer -type T\n")
-	fmt.Fprintf(os.Stderr, "Flags:\n")
-	flag.PrintDefaults()
-}
-
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("structstringer: ")
-	flag.Usage = Usage
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage of structstringer:\n")
+		fmt.Fprintf(os.Stderr, "\tstructstringer -type T\n")
+		fmt.Fprintf(os.Stderr, "Flags:\n")
+		flag.PrintDefaults()
+	}
 	flag.Parse()
 	if len(*typeName) == 0 {
 		flag.Usage()

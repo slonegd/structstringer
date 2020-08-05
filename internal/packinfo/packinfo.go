@@ -1,4 +1,4 @@
-package package_info
+package packinfo
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
+// Get - get package in current path
 func Get() (*packages.Package, error) {
 	pkgs, err := packages.Load(nil, ".")
 	if err != nil {
@@ -15,5 +16,4 @@ func Get() (*packages.Package, error) {
 		return nil, fmt.Errorf("must be only one package, got: %d", len(pkgs))
 	}
 	return pkgs[0], nil
-
 }
