@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestA_String(t *testing.T) {
+func TestAString(t *testing.T) {
 	tests := []struct {
 		a       A
 		want    string
@@ -67,20 +67,20 @@ simple.A{
 	}
 }
 
-func BenchmarkAString(b *testing.B) {
+func BenchmarkSimpleAString(b *testing.B) {
 	b.ResetTimer()
 	a := randomA()
 	b.StartTimer()
-	a.String()
+	_ = a.String()
 	b.StopTimer()
 
 }
 
-func BenchmarkAfmt(b *testing.B) {
+func BenchmarkSimpleAfmt(b *testing.B) {
 	b.ResetTimer()
 	a := randomA()
 	b.StartTimer()
-	fmt.Sprintf("%#v", a)
+	_ = fmt.Sprintf("%#v", a)
 	b.StopTimer()
 
 }
