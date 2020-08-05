@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/slonegd/structstringer/examples/simple"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,6 +37,31 @@ recursive.A{
 	for _, tt := range tests {
 		assert.Equal(t, tt.want, tt.a.String())
 		assert.Equal(t, tt.fmtWant, fmt.Sprintf("%#v", tt.a))
+	}
+}
+
+func TestDString(t *testing.T) {
+	tests := []struct {
+		d       D
+		want    string
+		fmtWant string
+	}{
+		{
+			d: D{i: 42, flag: true, b: simple.B{I: 43}},
+			want: `
+recursive.D{
+	i    int      42
+	flag bool     true
+	b    simple.B {
+		i    int  43
+	}
+}`,
+			fmtWant: "recursive.D{i:42, flag:true, b:simple.B{I:43}}",
+		},
+	}
+	for _, tt := range tests {
+		assert.Equal(t, tt.want, tt.d.String())
+		assert.Equal(t, tt.fmtWant, fmt.Sprintf("%#v", tt.d))
 	}
 }
 

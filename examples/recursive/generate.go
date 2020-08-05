@@ -1,6 +1,9 @@
 package recursive
 
+import "github.com/slonegd/structstringer/examples/simple"
+
 //go:generate go run ../.. -type A
+//go:generate go run ../.. -type D
 
 // A - test struct
 type A struct {
@@ -20,4 +23,11 @@ type B struct {
 type C struct {
 	i    int
 	flag bool
+}
+
+// D - test struct
+type D struct {
+	i    int
+	flag bool
+	b    simple.B
 }
