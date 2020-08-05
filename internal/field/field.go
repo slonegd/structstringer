@@ -60,14 +60,11 @@ func (field Field) generateStringer() string {
 		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.Name)
 	case "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32":
 		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.Name)
-	case "byte":
+	case "byte", "uintptr":
 		return fmt.Sprintf(`builder.WriteString("0x")
 		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
 	case "uint64":
 		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.Name)
-	case "uintptr":
-		return fmt.Sprintf(`builder.WriteString("0x")
-		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
 	case "rune":
 		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.Name)
 	case "float64":
