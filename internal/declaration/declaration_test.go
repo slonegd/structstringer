@@ -33,7 +33,7 @@ func TestFind(t *testing.T) {
 	}
 	for _, tt := range tests {
 		finder := NewFinder(tt.files)
-		_, err := finder.Find(tt.typeName)
+		_, err := finder.Find(tt.typeName, "")
 		if tt.wantErr != "" {
 			assert.Error(t, err)
 			assert.Equal(t, tt.wantErr, err.Error())

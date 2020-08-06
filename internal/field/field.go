@@ -6,10 +6,10 @@ import (
 
 // Field - simple struct represented one field of the struct
 type Field struct {
-	Name, Type, Package        string
-	Fields                     Fields
-	allignedName, allignedType string
-	tabs                       string
+	Name, Type, Package, PathToValue string
+	Fields                           Fields
+	allignedName, allignedType       string
+	tabs                             string
 }
 
 func (field Field) String() string {
@@ -41,6 +41,12 @@ func (fields *Fields) setTabs(tabs string) {
 	}
 }
 
+func (fields *Fields) setPathTovalue(path string) {
+	for i := range *fields {
+		(*fields)[i].PathToValue = path
+	}
+}
+
 func (field Field) generateDescription() string {
 	return fmt.Sprintf(`builder.WriteString("\n%s%s %s ")`, field.tabs, field.allignedName, field.allignedType)
 }
@@ -48,31 +54,32 @@ func (field Field) generateDescription() string {
 func (field Field) generateStringer() string {
 	if field.Fields != nil {
 		field.Fields.setTabs(field.tabs + "\\t")
+		// field.Fields.setPathTovalue(field.PathToValue + field.Name + ".")
 		return fmt.Sprintf(`builder.WriteRune('{')%s
 	builder.WriteString("\n%s}")`, field.Fields, field.tabs)
 	}
 	switch field.Type {
 	case "bool":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatBool(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatBool(t.%s))", field.PathToValue)
 	case "string":
-		return fmt.Sprintf("builder.WriteString(t.%s)", field.Name)
+		return fmt.Sprintf("builder.WriteString(t.%s)", field.PathToValue)
 	case "int":
-		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.PathToValue)
 	case "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32":
-		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.PathToValue)
 	case "byte", "uintptr":
 		return fmt.Sprintf(`builder.WriteString("0x")
-		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
+		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.PathToValue)
 	case "uint64":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.PathToValue)
 	case "rune":
-		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.PathToValue)
 	case "float64":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(t.%s, 'e', -1, 64))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(t.%s, 'e', -1, 64))", field.PathToValue)
 	case "float32":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(float64(t.%s), 'e', -1, 32))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(float64(t.%s), 'e', -1, 32))", field.PathToValue)
 	case "complex64", "complex128":
-		return fmt.Sprintf(`builder.WriteString(fmt.Sprintf("%%g", t.%s))`, field.Name)
+		return fmt.Sprintf(`builder.WriteString(fmt.Sprintf("%%g", t.%s))`, field.PathToValue)
 	default:
 		return `builder.WriteString("not_implemented")`
 	}

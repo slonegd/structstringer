@@ -23,11 +23,11 @@ recursive.A{
 	i    int         42
 	flag bool        true
 	b    recursive.B {
-		i    int         42
-		flag bool        true
+		i    int         43
+		flag bool        false
 		c    recursive.C {
-			i    int  42
-			flag bool true
+			i    int  0
+			flag bool false
 		}
 	}
 }`,
@@ -53,7 +53,7 @@ recursive.D{
 	i    int      42
 	flag bool     true
 	b    simple.B {
-		i    int  43
+		I int 43
 	}
 }`,
 			fmtWant: "recursive.D{i:42, flag:true, b:simple.B{I:43}}",
