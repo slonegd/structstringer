@@ -1,3 +1,4 @@
+// create field.Fields from type declaration
 package extractor
 
 import (

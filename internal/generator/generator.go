@@ -1,3 +1,4 @@
+// main logic
 package generator
 
 import (

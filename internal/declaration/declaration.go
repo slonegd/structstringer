@@ -1,3 +1,4 @@
+// find declaration of the type
 package declaration
 
 import (
@@ -13,9 +14,9 @@ type Finder interface {
 }
 
 type Type struct {
-	Spec    *ast.TypeSpec
+	Spec    *ast.TypeSpec // TODO dont use ast package for out
 	Imports map[string]string
-	Path    string
+	Path    string // TODO move to field
 }
 
 // NewFinder - for find type declaration in files

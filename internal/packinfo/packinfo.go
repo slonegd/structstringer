@@ -1,3 +1,4 @@
+// get package info
 package packinfo
 
 import (

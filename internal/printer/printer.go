@@ -1,3 +1,4 @@
+// print to file template
 package printer
 
 import "strings"

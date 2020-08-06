@@ -1,3 +1,4 @@
+// stringer of the fields for generator
 package field
 
 import (
