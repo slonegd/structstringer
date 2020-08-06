@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"go/format"
 	"io/ioutil"
-	"log"
 	"strings"
 )
 
 // Save - format source and save to file
 func Save(source, typeName string) error {
-	log.Printf(source)
 	fmtSource, err := format.Source([]byte(source))
 	if err != nil {
 		return fmt.Errorf("format source: %w", err)

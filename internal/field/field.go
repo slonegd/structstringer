@@ -41,12 +41,6 @@ func (fields *Fields) setTabs(tabs string) {
 	}
 }
 
-func (fields *Fields) setPathTovalue(path string) {
-	for i := range *fields {
-		(*fields)[i].PathToValue = path
-	}
-}
-
 func (field Field) generateDescription() string {
 	return fmt.Sprintf(`builder.WriteString("\n%s%s %s ")`, field.tabs, field.allignedName, field.allignedType)
 }
