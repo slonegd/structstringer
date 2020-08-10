@@ -65,6 +65,32 @@ recursive.D{
 	}
 }
 
+func TestEString(t *testing.T) {
+	tests := []struct {
+		e       E
+		want    string
+		fmtWant string
+	}{
+		{
+			e: E{i: 42, flag: true, c: simple.C{I: 43}},
+			want: `
+recursive.E{
+	i    int      42
+	flag bool     true
+	c    simple.C {
+		I    int  43
+		flag bool not_implemented_unexported_fields
+	}
+}`,
+			fmtWant: "recursive.E{i:42, flag:true, c:simple.C{I:43, flag:false}}",
+		},
+	}
+	for _, tt := range tests {
+		assert.Equal(t, tt.want, tt.e.String())
+		assert.Equal(t, tt.fmtWant, fmt.Sprintf("%#v", tt.e))
+	}
+}
+
 func BenchmarkRecursiveAString(b *testing.B) {
 	b.ResetTimer()
 	a := randomA()

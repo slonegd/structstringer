@@ -48,11 +48,12 @@ func (extractor extractor) ExtractFields(typeSpec declaration.Type) (field.Field
 			packageName := typeSelector.X.(*ast.Ident).Name
 			pathToValue := typeSpec.Path + pfield.Names[0].Name
 			fields = append(fields, field.Field{
-				Name:        pfield.Names[0].Name, // TODO >1
-				PathToValue: pathToValue,
-				Type:        typeSelector.Sel.Name,
-				Package:     packageName,
-				Fields:      extractor.fieldsInOtherPackage(typeSpec.Imports[packageName], typeSelector.Sel.Name, pathToValue+"."),
+				Name:           pfield.Names[0].Name, // TODO >1
+				PathToValue:    pathToValue,
+				Type:           typeSelector.Sel.Name,
+				Package:        packageName,
+				IsOtherPackage: true,
+				Fields:         extractor.fieldsInOtherPackage(typeSpec.Imports[packageName], typeSelector.Sel.Name, pathToValue+"."),
 			})
 		}
 

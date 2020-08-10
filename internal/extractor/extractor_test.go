@@ -54,7 +54,7 @@ func Test_extractor_ExtractFields(t *testing.T) {
 			packageName: "extractor",
 			want: field.Fields{
 				{Name: "i", PathToValue: "i", Type: "int", Package: "extractor"},
-				{Name: "b", PathToValue: "b", Type: "B", Package: "simple", Fields: field.Fields{
+				{Name: "b", PathToValue: "b", Type: "B", Package: "simple", IsOtherPackage: true, Fields: field.Fields{
 					{Name: "I", PathToValue: "b.I", Type: "int", Package: "simple"},
 				}},
 			},
