@@ -47,6 +47,18 @@ func Test_extractor_ExtractFields(t *testing.T) {
 				}},
 			},
 		},
+		{
+			name:        "other package",
+			files:       []string{"file1_test.go", "file2_test.go"},
+			typeName:    "E",
+			packageName: "extractor",
+			want: field.Fields{
+				{Name: "i", PathToValue: "i", Type: "int", Package: "extractor"},
+				{Name: "b", PathToValue: "b", Type: "B", Package: "simple", Fields: field.Fields{
+					{Name: "I", PathToValue: "b.I", Type: "int", Package: "simple"},
+				}},
+			},
+		},
 	}
 	for _, tt := range tests {
 		finder := declaration.NewFinder(tt.files)
