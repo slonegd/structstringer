@@ -23,8 +23,8 @@ func Test_extractor_ExtractFields(t *testing.T) {
 			typeName:    "A",
 			packageName: "extractor",
 			want: field.Fields{
-				{Name: "i", Type: "int", Package: "extractor"},
-				{Name: "flag", Type: "bool", Package: "extractor"},
+				{Name: "i", PathToValue: "i", Type: "int", Package: "extractor"},
+				{Name: "flag", PathToValue: "flag", Type: "bool", Package: "extractor"},
 			},
 		},
 		{
@@ -40,17 +40,29 @@ func Test_extractor_ExtractFields(t *testing.T) {
 			typeName:    "D",
 			packageName: "extractor",
 			want: field.Fields{
-				{Name: "i", Type: "int", Package: "extractor"},
-				{Name: "b", Type: "B", Package: "extractor", Fields: field.Fields{
-					{Name: "i", Type: "int", Package: "extractor"},
-					{Name: "flag", Type: "bool", Package: "extractor"},
+				{Name: "i", PathToValue: "i", Type: "int", Package: "extractor"},
+				{Name: "b", PathToValue: "b", Type: "B", Package: "extractor", Fields: field.Fields{
+					{Name: "i", PathToValue: "b.i", Type: "int", Package: "extractor"},
+					{Name: "flag", PathToValue: "b.flag", Type: "bool", Package: "extractor"},
+				}},
+			},
+		},
+		{
+			name:        "other package",
+			files:       []string{"file1_test.go", "file2_test.go"},
+			typeName:    "E",
+			packageName: "extractor",
+			want: field.Fields{
+				{Name: "i", PathToValue: "i", Type: "int", Package: "extractor"},
+				{Name: "b", PathToValue: "b", Type: "B", Package: "simple", IsOtherPackage: true, Fields: field.Fields{
+					{Name: "I", PathToValue: "b.I", Type: "int", Package: "simple"},
 				}},
 			},
 		},
 	}
 	for _, tt := range tests {
 		finder := declaration.NewFinder(tt.files)
-		decl, _ := finder.Find(tt.typeName)
+		decl, _ := finder.Find(tt.typeName, "")
 
 		extractor := NewExtractor(finder, tt.packageName)
 		got, err := extractor.ExtractFields(decl)

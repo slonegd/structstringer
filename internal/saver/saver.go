@@ -1,3 +1,4 @@
+// format source and save to file
 package saver
 
 import (

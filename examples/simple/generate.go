@@ -23,3 +23,14 @@ type A struct {
 	c64  complex64
 	c128 complex128
 }
+
+// B - test struct
+type B struct {
+	I int
+}
+
+// C - test struct
+type C struct {
+	I    int
+	flag bool
+}

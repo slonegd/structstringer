@@ -1,3 +1,4 @@
+// get package info
 package packinfo
 
 import (
@@ -9,6 +10,17 @@ import (
 // Get - get package in current path
 func Get() (*packages.Package, error) {
 	pkgs, err := packages.Load(nil, ".")
+	if err != nil {
+		return nil, fmt.Errorf("load packages: %w", err)
+	}
+	if len(pkgs) != 1 {
+		return nil, fmt.Errorf("must be only one package, got: %d", len(pkgs))
+	}
+	return pkgs[0], nil
+}
+
+func GetByPath(path string) (*packages.Package, error) {
+	pkgs, err := packages.Load(nil, path)
 	if err != nil {
 		return nil, fmt.Errorf("load packages: %w", err)
 	}

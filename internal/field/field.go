@@ -1,15 +1,19 @@
+// stringer of the fields for generator
 package field
 
 import (
 	"fmt"
+	"unicode"
+	"unicode/utf8"
 )
 
 // Field - simple struct represented one field of the struct
 type Field struct {
-	Name, Type, Package        string
-	Fields                     Fields
-	allignedName, allignedType string
-	tabs                       string
+	Name, Type, Package, PathToValue string
+	IsOtherPackage                   bool
+	Fields                           Fields
+	allignedName, allignedType       string
+	tabs                             string
 }
 
 func (field Field) String() string {
@@ -41,40 +45,54 @@ func (fields *Fields) setTabs(tabs string) {
 	}
 }
 
+func (fields *Fields) setOtherPackage() {
+	for i := range *fields {
+		(*fields)[i].IsOtherPackage = true
+	}
+}
+
 func (field Field) generateDescription() string {
 	return fmt.Sprintf(`builder.WriteString("\n%s%s %s ")`, field.tabs, field.allignedName, field.allignedType)
 }
 
 func (field Field) generateStringer() string {
-	if field.Fields != nil {
+	if len(field.Fields) != 0 {
 		field.Fields.setTabs(field.tabs + "\\t")
+		if field.IsOtherPackage || field.Package != field.Fields[0].Package {
+			field.Fields.setOtherPackage()
+		}
 		return fmt.Sprintf(`builder.WriteRune('{')%s
 	builder.WriteString("\n%s}")`, field.Fields, field.tabs)
 	}
+
+	if field.IsOtherPackage && unexported(field.Name) {
+		return `builder.WriteString("not_implemented_unexported_fields")`
+	}
+
 	switch field.Type {
 	case "bool":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatBool(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatBool(t.%s))", field.PathToValue)
 	case "string":
-		return fmt.Sprintf("builder.WriteString(t.%s)", field.Name)
+		return fmt.Sprintf("builder.WriteString(t.%s)", field.PathToValue)
 	case "int":
-		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(t.%s))", field.PathToValue)
 	case "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32":
-		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.Itoa(int(t.%s)))", field.PathToValue)
 	case "byte", "uintptr":
 		return fmt.Sprintf(`builder.WriteString("0x")
-		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.Name)
+		builder.WriteString(strconv.FormatUint(uint64(t.%s), 16))`, field.PathToValue)
 	case "uint64":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatUint(t.%s, 10))", field.PathToValue)
 	case "rune":
-		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.Name)
+		return fmt.Sprintf("builder.WriteString(string(t.%s))", field.PathToValue)
 	case "float64":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(t.%s, 'e', -1, 64))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(t.%s, 'e', -1, 64))", field.PathToValue)
 	case "float32":
-		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(float64(t.%s), 'e', -1, 32))", field.Name)
+		return fmt.Sprintf("builder.WriteString(strconv.FormatFloat(float64(t.%s), 'e', -1, 32))", field.PathToValue)
 	case "complex64", "complex128":
-		return fmt.Sprintf(`builder.WriteString(fmt.Sprintf("%%g", t.%s))`, field.Name)
+		return fmt.Sprintf(`builder.WriteString(fmt.Sprintf("%%g", t.%s))`, field.PathToValue)
 	default:
-		return `builder.WriteString("not_implemented")`
+		return `builder.WriteString("not_implemented_unknow_type")`
 	}
 }
 
@@ -104,4 +122,12 @@ func growWight(v string, wight int) string {
 		v += " "
 	}
 	return v
+}
+
+func unexported(v string) bool {
+	if len(v) == 0 {
+		return true
+	}
+	r, _ := utf8.DecodeRuneInString(v)
+	return unicode.IsLower(r)
 }

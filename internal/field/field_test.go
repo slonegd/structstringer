@@ -15,8 +15,8 @@ func TestFields_String(t *testing.T) {
 		{
 			name: "happy path",
 			fields: Fields{
-				{Name: "i", Type: "int"},
-				{Name: "flag", Type: "bool"},
+				{Name: "i", PathToValue: "i", Type: "int", Package: "field"},
+				{Name: "flag", PathToValue: "flag", Type: "bool", Package: "field"},
 			},
 			want: `
 	builder.WriteString("\n\ti    int  ")
@@ -30,24 +30,24 @@ func TestFields_String(t *testing.T) {
 			want:   ``,
 		},
 		{
-			name: "not implemented",
+			name: "not implemented unknow type",
 			fields: Fields{
-				{Name: "i", Type: "int"},
-				{Name: "flag", Type: "bools"},
+				{Name: "i", PathToValue: "i", Type: "int", Package: "field"},
+				{Name: "flag", PathToValue: "flag", Type: "bools", Package: "field"},
 			},
 			want: `
 	builder.WriteString("\n\ti    int   ")
 	builder.WriteString(strconv.Itoa(t.i))
 	builder.WriteString("\n\tflag bools ")
-	builder.WriteString("not_implemented")`,
+	builder.WriteString("not_implemented_unknow_type")`,
 		},
 		{
 			name: "recursive",
 			fields: Fields{
-				{Name: "i", Type: "int"},
-				{Name: "b", Type: "B", Package: "field", Fields: Fields{
-					{Name: "i", Type: "int"},
-					{Name: "flag", Type: "bool"},
+				{Name: "i", PathToValue: "i", Type: "int", Package: "field"},
+				{Name: "b", PathToValue: "b", Type: "B", Package: "field", Fields: Fields{
+					{Name: "i", PathToValue: "b.i", Type: "int", Package: "field"},
+					{Name: "flag", PathToValue: "b.flag", Type: "bool", Package: "field"},
 				}},
 			},
 			want: `
@@ -56,9 +56,29 @@ func TestFields_String(t *testing.T) {
 	builder.WriteString("\n\tb field.B ")
 	builder.WriteRune('{')
 	builder.WriteString("\n\t\ti    int  ")
-	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString(strconv.Itoa(t.b.i))
 	builder.WriteString("\n\t\tflag bool ")
-	builder.WriteString(strconv.FormatBool(t.flag))
+	builder.WriteString(strconv.FormatBool(t.b.flag))
+	builder.WriteString("\n\t}")`,
+		},
+		{
+			name: "unexported field from other package",
+			fields: Fields{
+				{Name: "i", PathToValue: "i", Type: "int", Package: "field"},
+				{Name: "b", PathToValue: "b", Type: "B", Package: "other", IsOtherPackage: true, Fields: Fields{
+					{Name: "I", PathToValue: "b.I", Type: "int", Package: "other"},
+					{Name: "flag", PathToValue: "b.flag", Type: "bool", Package: "other"},
+				}},
+			},
+			want: `
+	builder.WriteString("\n\ti int     ")
+	builder.WriteString(strconv.Itoa(t.i))
+	builder.WriteString("\n\tb other.B ")
+	builder.WriteRune('{')
+	builder.WriteString("\n\t\tI    int  ")
+	builder.WriteString(strconv.Itoa(t.b.I))
+	builder.WriteString("\n\t\tflag bool ")
+	builder.WriteString("not_implemented_unexported_fields")
 	builder.WriteString("\n\t}")`,
 		},
 	}

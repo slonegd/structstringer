@@ -1,3 +1,4 @@
+// main logic
 package generator
 
 import (
@@ -15,7 +16,7 @@ func Generate(typeName string) {
 	catchError(err)
 
 	finder := declaration.NewFinder(pkg.GoFiles)
-	typeSpec, err := finder.Find(typeName)
+	typeSpec, err := finder.Find(typeName, "")
 	catchError(err)
 
 	extractor := extractor.NewExtractor(finder, pkg.Name)
