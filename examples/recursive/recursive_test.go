@@ -93,20 +93,22 @@ recursive.E{
 
 func BenchmarkRecursiveAString(b *testing.B) {
 	b.ResetTimer()
-	a := randomA()
-	b.StartTimer()
-	_ = a.String()
-	b.StopTimer()
-
+	for i := 0; i < 1000; i++ {
+		a := randomA()
+		b.StartTimer()
+		_ = a.String()
+		b.StopTimer()
+	}
 }
 
 func BenchmarkRecursiveAfmt(b *testing.B) {
 	b.ResetTimer()
-	a := randomA()
-	b.StartTimer()
-	_ = fmt.Sprintf("%#v", a)
-	b.StopTimer()
-
+	for i := 0; i < 1000; i++ {
+		a := randomA()
+		b.StartTimer()
+		_ = fmt.Sprintf("%#v", a)
+		b.StopTimer()
+	}
 }
 
 func randomA() A {
